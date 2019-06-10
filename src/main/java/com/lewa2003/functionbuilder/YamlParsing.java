@@ -18,7 +18,6 @@ class YamlParsing {
             e.printStackTrace();
         }
         RestService service = yaml.load(inputStream);
-        System.out.println(service.getName());
         return service;
     }
 }

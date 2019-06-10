@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-class Builder {
+class MethodBuilder {
     static void BuildFunction (RestService service, String outputPath) {
         List<String> lines = new ArrayList<>();
 
@@ -26,9 +26,8 @@ class Builder {
 
         if (parameterParameters.size() > 0){
             String urlPart = "    url = url";
-            for (int i = 0; i < parameterParameters.size(); i++) {
-                urlPart += " + \"?" + parameterParameters.get(i).getName() +
-                        "=\" + " + parameterParameters.get(i).getName();
+            for (Parameter i : parameterParameters) {
+                urlPart += " + \"?" + i.getName() + "=\" + " + i.getName();
             }
             urlPart += ";\n";
             lines.add(urlPart);
