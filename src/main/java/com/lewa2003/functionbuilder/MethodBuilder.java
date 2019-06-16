@@ -59,7 +59,8 @@ class MethodBuilder {
         headPart.append(service.getName());
         headPart.append("(");
         for (int i = 0; i < parameters.size()-1; i++) {
-            headPart.append(parameters.get(i).getName()); headPart.append(", ");
+            headPart.append(parameters.get(i).getName());
+            headPart.append(", ");
         }
         headPart.append(parameters.get(parameters.size()-1).getName());
         headPart.append(")\n");
@@ -67,9 +68,8 @@ class MethodBuilder {
     }
 
     private static void addUrl(RestService service, List<Parameter> urlParameters) {
-        StringBuilder url = new StringBuilder("/");
-        url.append(service.getUrl().split("/")[1]);
-        url.append("/");
+        String template = "/%s/";
+        StringBuilder url = new StringBuilder(String.format(template,service.getUrl().split("/")[1]));
         StringBuilder urlPart = new StringBuilder("    url = СтрШаблон(\"");
         urlPart.append(url);
         if (urlParameters.size() == 0) {
