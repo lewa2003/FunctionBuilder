@@ -12,4 +12,18 @@ public class Parameter {
     public void setName(String name) { this.name = name; }
     public void setPlace(String place) { this.place = place; }
     public void setType(String type) { this.type = type; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Parameter parameter = (Parameter) o;
+        return name == null ? parameter.getName() == null : name.equals(parameter.getName()) &&
+                place == null ? parameter.getPlace() == null : place.equals(parameter.getPlace()) &&
+                type == null ? parameter.getType() == null : type.equals(parameter.getType());
+    }
 }
