@@ -5,7 +5,7 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.*;
 
 class YamlParsing {
-    static RestService ReadYaml (String inputYamlPath) {
+    static RestService readYaml(String inputYamlPath) {
         Yaml yaml = new Yaml();
 
         String restServiceClassPath = "!!com.lewa2003.functionbuilder.RestService\n";
