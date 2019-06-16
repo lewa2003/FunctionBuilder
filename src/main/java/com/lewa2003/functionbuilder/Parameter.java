@@ -5,6 +5,15 @@ public class Parameter {
     private String place;
     private String type;
 
+    Parameter () {
+    }
+
+    Parameter (String name, String place, String type) {
+        this.name = name;
+        this.place = place;
+        this.type = type;
+    }
+
     public String getName(){ return name; }
     public String getPlace() { return place; }
     public String getType() { return type; }
