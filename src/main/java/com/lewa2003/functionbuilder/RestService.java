@@ -59,11 +59,11 @@ public class RestService {
             return false;
         }
         RestService service = (RestService) o;
-        return name == null ? service.getName() == null : name.equals(service.getName()) &&
-                host == null ? service.getHost() == null : host.equals(service.getHost()) &&
-                method == null ? service.getMethod() == null : method.equals(service.getMethod()) &&
-                url == null ? service.getUrl() == null : url.equals(service.getUrl()) &&
-                parameters == null ? service.getParameters() == null : parameters.equals(service.getParameters());
+        return (name == null ? service.getName() == null : name.equals(service.getName())) &&
+                (host == null ? service.getHost() == null : host.equals(service.getHost())) &&
+                (method == null ? service.getMethod() == null : method.equals(service.getMethod())) &&
+                (url == null ? service.getUrl() == null : url.equals(service.getUrl())) &&
+                (parameters == null ? service.getParameters() == null : parameters.equals(service.getParameters()));
     }
 }
 

@@ -22,8 +22,8 @@ public class Parameter {
             return false;
         }
         Parameter parameter = (Parameter) o;
-        return name == null ? parameter.getName() == null : name.equals(parameter.getName()) &&
-                place == null ? parameter.getPlace() == null : place.equals(parameter.getPlace()) &&
-                type == null ? parameter.getType() == null : type.equals(parameter.getType());
+        return (name == null ? parameter.getName() == null : name.equals(parameter.getName())) &&
+                (place == null ? parameter.getPlace() == null : place.equals(parameter.getPlace())) &&
+                (type == null ? parameter.getType() == null : type.equals(parameter.getType()));
     }
 }
