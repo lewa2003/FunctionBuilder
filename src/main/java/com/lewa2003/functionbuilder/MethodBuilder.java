@@ -1,16 +1,12 @@
 package com.lewa2003.functionbuilder;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 class MethodBuilder {
-    private static List<String> lines = new ArrayList<>();
+    private static StringBuilder generatedMethod = new StringBuilder();
 
-    static void buildFunction(RestService service, String outputPath) {
+    static String buildFunction(RestService service) {
 
         List<Parameter> parameters = service.getParameters();
 
@@ -37,11 +33,7 @@ class MethodBuilder {
 
         addLastPart(service);
 
-        try {
-            Files.write(Paths.get(outputPath), lines, StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return generatedMethod.toString();
     }
 
     private static List<Parameter> parseParameters(List<Parameter> parameters, String parameterplace) {
@@ -64,13 +56,13 @@ class MethodBuilder {
         }
         headPart.append(parameters.get(parameters.size()-1).getName());
         headPart.append(")\n");
-        lines.add(headPart.toString());
+        generatedMethod.append(headPart.toString());
     }
 
     private static void addUrl(RestService service, List<Parameter> urlParameters) {
         String template = "/%s/";
         StringBuilder url = new StringBuilder(String.format(template,service.getUrl().split("/")[1]));
-        StringBuilder urlPart = new StringBuilder("    url = СтрШаблон(\"");
+        StringBuilder urlPart = new StringBuilder("\turl = СтрШаблон(\"");
         urlPart.append(url);
         if (urlParameters.size() == 0) {
             urlPart.append("\");\n");
@@ -79,53 +71,53 @@ class MethodBuilder {
             urlPart.append(urlParameters.get(0).getName());
             urlPart.append(");\n");
         }
-        lines.add(urlPart.toString());
+        generatedMethod.append(urlPart.toString());
 
     }
 
     private static void addParameterParameters(List<Parameter> parameterParameters) {
-        StringBuilder parameterPart = new StringBuilder("    url = url");
+        StringBuilder parameterPart = new StringBuilder("\turl = url");
         for (Parameter i : parameterParameters) {
             String template = " + \"?%s=\" + %s";
             parameterPart.append(String.format(template, i.getName(), i.getName()));
         }
         parameterPart.append(";\n");
-        lines.add(parameterPart.toString());
+        generatedMethod.append(parameterPart.toString());
 
     }
 
     private static void addHeaderParameters(List<Parameter> headerParameters) {
-        StringBuilder headerPart = new StringBuilder("    Заголовки = Новый Соответствие();\n");
+        StringBuilder headerPart = new StringBuilder("\tЗаголовки = Новый Соответствие();\n");
         for (Parameter i : headerParameters) {
-            String template = "    Заголовки.Добавить(\"%s\", %s);\n";
+            String template = "\tЗаголовки.Добавить(\"%s\", %s);\n";
             headerPart.append(String.format(template, i.getName(), i.getName()));
         }
-        headerPart.append("    Запрос = Новый HttpЗапрос(url, Заголовки);\n");
-        lines.add(headerPart.toString());
+        headerPart.append("\tЗапрос = Новый HttpЗапрос(url, Заголовки);\n");
+        generatedMethod.append(headerPart.toString());
     }
 
     private static void addBodyParameters(List<Parameter> bodyParameters) {
-        StringBuilder bodyPart = new StringBuilder("    Тело = Новый Соответствие();\n");
+        StringBuilder bodyPart = new StringBuilder("\tТело = Новый Соответствие();\n");
         for (Parameter i : bodyParameters) {
-            String template = "    Тело.Вставить(\"%s\", %s);\n";
+            String template = "\tТело.Вставить(\"%s\", %s);\n";
             bodyPart.append(String.format(template, i.getName(), i.getName()));
         }
-        bodyPart.append("    ЗаписьJson = Новый ЗаписьJson();\n");
-        bodyPart.append("    Запрос.УстановитьТелоИзСтроки(ЗаписатьJson(ЗаписьJson, Тело));\n");
-        lines.add(bodyPart.toString());
+        bodyPart.append("\tЗаписьJson = Новый ЗаписьJson();\n");
+        bodyPart.append("\tЗапрос.УстановитьТелоИзСтроки(ЗаписатьJson(ЗаписьJson, Тело));\n");
+        generatedMethod.append(bodyPart.toString());
     }
 
     private static void addLastPart(RestService service) {
-        StringBuilder lastPart = new StringBuilder("    Соединение = Новый HTTPСоединение(\"");
+        StringBuilder lastPart = new StringBuilder("\tСоединение = Новый HTTPСоединение(\"");
         lastPart.append(service.getHost());
-        lastPart.append("\");\n");
-        lastPart.append("    Ответ = Соединение.ВызватьHTTPМетод(\"");
+        lastPart.append("\");\n\tОтвет = Соединение.ВызватьHTTPМетод(\"");
         lastPart.append(service.getMethod());
         lastPart.append("\", Запрос);\n");
-        lastPart.append("    Если Ответ.КодСостояния <> 200 Тогда\n");
-        lastPart.append("        ВызватьИсключение СтрШаблон(\"Ошибка % вызова сервиса %\", Ответ.КодСостояния, \"\");\n");
-        lastPart.append("    КонецЕсли;\nКонецПроцедура\n");
+        lastPart.append("\tЕсли Ответ.КодСостояния <> 200 Тогда\n");
+        lastPart.append("\t\tВызватьИсключение СтрШаблон(\"Ошибка % вызова сервиса %\", Ответ.КодСостояния, \"");
+        lastPart.append(service.getName());
+        lastPart.append("\");\n\tКонецЕсли;\nКонецПроцедура\n");
 
-        lines.add(lastPart.toString());
+        generatedMethod.append(lastPart.toString());
     }
 }
