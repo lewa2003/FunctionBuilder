@@ -1,5 +1,6 @@
 package com.lewa2003.functionbuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RestService {
@@ -8,6 +9,24 @@ public class RestService {
     private String method;
     private String url;
     private List<Parameter> parameters;
+
+    public void actualize() {
+        if (name == null) {
+            name = new String();
+        }
+        if (host == null) {
+            host = new String();
+        }
+        if (method == null) {
+            method = new String();
+        }
+        if (url == null) {
+            url = new String();
+        }
+        if (parameters == null) {
+            parameters = new ArrayList<>();
+        }
+    }
 
     public String getName() {
         return name;
